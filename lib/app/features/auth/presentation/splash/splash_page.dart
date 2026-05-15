@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:veggicart/app/core/router/app_routes.dart';
 import 'package:veggicart/gen/assets.gen.dart';
 
 class SplashPage extends StatefulWidget {
@@ -10,6 +11,18 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 2), () {
+      final ctx = context;
+      if (!ctx.mounted) return;
+
+      const LoginRoute().go(ctx);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
