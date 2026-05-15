@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthRepository(
             remote: AuthRemoteDataSource(
               auth: FirebaseAuth.instance,
+              db: FirebaseFirestore.instance,
             ),
           ),
         ),

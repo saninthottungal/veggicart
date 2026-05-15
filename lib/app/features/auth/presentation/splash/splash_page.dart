@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:provider/provider.dart';
+import 'package:veggicart/app/core/data/result.dart';
 import 'package:veggicart/app/core/router/app_routes.dart';
+import 'package:veggicart/app/features/auth/presentation/splash/splash_provider.dart';
 import 'package:veggicart/gen/assets.gen.dart';
 
 class SplashPage extends StatefulWidget {
@@ -15,11 +18,15 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    final pod = context.read<SplashProvider>();
+    pod.getProfile().then((res) {
       final ctx = context;
       if (!ctx.mounted) return;
 
-      const LoginRoute().go(ctx);
+      if (res case Success(:final value)) {
+      } else {
+        const LoginRoute().go(ctx);
+      }
     });
   }
 

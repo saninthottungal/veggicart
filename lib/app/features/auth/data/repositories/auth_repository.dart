@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veggicart/app/core/data/result.dart';
+import 'package:veggicart/app/features/auth/data/models/user_model.dart';
 import 'package:veggicart/app/features/auth/data/sources/auth_remote_data_source.dart';
 
 class AuthRepository {
@@ -33,7 +34,17 @@ class AuthRepository {
 
   Stream<User?> get authStateChanges => _remote.authStateChanges;
 
-  Future<void> getProfile(String id) async {
-    return _remote.getProfile(id);
+  Future<Result<UserModel, String>> getProfile() async {
+    try {
+      final authUser = _remote.currentUser;
+      if (authUser == null) return const Failure("Failed to get user");
+
+      final res = await _remote.getProfile(authUser.uid);
+      return Success(res);
+    } on FirebaseException catch (e) {
+      return Failure(e.code, description: e.message);
+    } catch (e) {
+      return const Failure('Failed to get user');
+    }
   }
 }

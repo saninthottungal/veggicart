@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veggicart/app/features/auth/data/models/user_model.dart';
 
 class AuthRemoteDataSource {
   AuthRemoteDataSource({
@@ -29,12 +30,12 @@ class AuthRemoteDataSource {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<void> getProfile(String id) async {
+  Future<UserModel> getProfile(String id) async {
     final data = (await _db.collection('profiles').doc(id).get()).data();
     if (data == null) {
       throw Exception('User not found');
     }
 
-    print(data);
+    return UserModel.fromJson(data);
   }
 }
