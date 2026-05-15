@@ -5,6 +5,7 @@ import 'package:veggicart/app/features/auth/presentation/login/login_page.dart';
 import 'package:veggicart/app/features/auth/presentation/login/login_provider.dart';
 import 'package:veggicart/app/features/auth/presentation/splash/splash_page.dart';
 import 'package:veggicart/app/features/auth/presentation/splash/splash_provider.dart';
+import 'package:veggicart/app/features/profile/presentation/profile_page/profile_page.dart';
 
 part 'app_routes.g.dart';
 
@@ -31,5 +32,17 @@ class LoginRoute extends GoRouteData with $LoginRoute {
       create: (context) => LoginProvider(authRepo: context.read()),
       child: const LoginPage(),
     );
+  }
+}
+
+@TypedGoRoute<ProfileRoute>(path: '/:id')
+class ProfileRoute extends GoRouteData with $ProfileRoute {
+  const ProfileRoute(this.id);
+
+  final String id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ProfilePage();
   }
 }

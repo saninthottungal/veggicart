@@ -24,6 +24,7 @@ class _SplashPageState extends State<SplashPage> {
       if (!ctx.mounted) return;
 
       if (res case Success(:final value)) {
+        ProfileRoute(value.uid).go(ctx);
       } else {
         const LoginRoute().go(ctx);
       }
