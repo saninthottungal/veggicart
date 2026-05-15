@@ -35,9 +35,12 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               const Spacer(),
 
-              Assets.logos.splashLogo.image(
-                height: 97,
-                width: 300,
+              Hero(
+                tag: 'logo-splash-login',
+                child: Assets.logos.splashLogo.image(
+                  height: 97,
+                  width: 300,
+                ),
               ),
 
               const Spacer(),
