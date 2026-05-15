@@ -57,107 +57,116 @@ class LoginPage extends StatelessWidget {
         body: SafeArea(
           child: Padding(
             padding: .all(context.gutter),
-            child: Column(
-              mainAxisAlignment: .spaceAround,
-              children: [
-                Hero(
-                  tag: 'logo-splash-login',
-                  child: Assets.logos.splashLogo.image(
-                    width: 200,
-                    height: 60,
-                  ),
-                ),
-
-                Assets.images.vegetablesBucket.image(
-                  width: context.mdSize.width * .6,
-                  height: 250,
-                ),
-
-                FormBuilder(
-                  autovalidateMode: .onUserInteractionIfError,
-                  key: _loginFormKey,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: context.gutter,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: .spaceAround,
+                children: [
+                  const GutterExtraLarge(),
+                  Hero(
+                    tag: 'logo-splash-login',
+                    child: Assets.logos.splashLogo.image(
+                      width: 200,
+                      height: 60,
                     ),
-                    child: Column(
-                      spacing: context.gutter,
-                      children: [
-                        Align(
-                          alignment: .centerLeft,
-                          child: Text.rich(
-                            TextSpan(
-                              text: '${t.enterYour.capitalize} ${t.registered}',
-                              children: [
-                                TextSpan(
-                                  text: '\n${t.credentials}',
-                                  style: context.textTheme.bodyLarge?.copyWith(
-                                    color: context.colorScheme.primary,
-                                    fontWeight: .w700,
-                                    fontSize: 18,
+                  ),
+
+                  const GutterLarge(),
+
+                  Assets.images.vegetablesBucket.image(
+                    width: context.mdSize.width * .6,
+                    height: 250,
+                  ),
+
+                  const GutterLarge(),
+
+                  FormBuilder(
+                    autovalidateMode: .onUserInteractionIfError,
+                    key: _loginFormKey,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.gutter,
+                      ),
+                      child: Column(
+                        spacing: context.gutter,
+                        children: [
+                          Align(
+                            alignment: .centerLeft,
+                            child: Text.rich(
+                              TextSpan(
+                                text:
+                                    '${t.enterYour.capitalize} ${t.registered}',
+                                children: [
+                                  TextSpan(
+                                    text: '\n${t.credentials}',
+                                    style: context.textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: context.colorScheme.primary,
+                                          fontWeight: .w700,
+                                          fontSize: 18,
+                                        ),
                                   ),
-                                ),
-                                TextSpan(text: ' ${t.to} ${t.continueKey}'),
-                              ],
-                            ),
+                                  TextSpan(text: ' ${t.to} ${t.continueKey}'),
+                                ],
+                              ),
 
-                            style: context.textTheme.bodyLarge?.copyWith(
-                              fontWeight: .w700,
-                              fontSize: 18,
-                            ),
-                            textAlign: .left,
-                          ),
-                        ),
-
-                        FormBuilderTextField(
-                          name: _email,
-                          decoration: InputDecoration(
-                            hintText: 'Your E-mail',
-                            prefixIcon: const Icon(LucideIcons.mail),
-                            border: .none,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: .circular(context.gutter),
-                            ),
-                          ),
-
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.email(),
-                          ]),
-                        ),
-
-                        const PasswordField(
-                          name: _password,
-                        ),
-
-                        GestureDetector(
-                          onTap: () => _signIn(context),
-                          behavior: .translucent,
-                          child: Container(
-                            padding: .symmetric(
-                              vertical: context.gutterSmall,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: context.colorScheme.primary,
-                              borderRadius: .circular(15),
-                            ),
-                            height: 50,
-                            alignment: .center,
-                            child: Text(
-                              "Login",
                               style: context.textTheme.bodyLarge?.copyWith(
-                                color: context.colorScheme.onPrimary,
-                                fontWeight: .w600,
+                                fontWeight: .w700,
+                                fontSize: 18,
+                              ),
+                              textAlign: .left,
+                            ),
+                          ),
+
+                          FormBuilderTextField(
+                            name: _email,
+                            decoration: InputDecoration(
+                              hintText: 'Your E-mail',
+                              prefixIcon: const Icon(LucideIcons.mail),
+                              border: .none,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: .circular(context.gutter),
+                              ),
+                            ),
+
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                              FormBuilderValidators.email(),
+                            ]),
+                          ),
+
+                          const PasswordField(
+                            name: _password,
+                          ),
+
+                          GestureDetector(
+                            onTap: () => _signIn(context),
+                            behavior: .translucent,
+                            child: Container(
+                              padding: .symmetric(
+                                vertical: context.gutterSmall,
+                              ),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.primary,
+                                borderRadius: .circular(15),
+                              ),
+                              height: 50,
+                              alignment: .center,
+                              child: Text(
+                                "Login",
+                                style: context.textTheme.bodyLarge?.copyWith(
+                                  color: context.colorScheme.onPrimary,
+                                  fontWeight: .w600,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
