@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:veggicart/app/features/admin/presentation/bottom_nav/bottom_nav_page.dart';
+import 'package:veggicart/app/features/admin/presentation/dashboard/dashboard_page.dart';
+import 'package:veggicart/app/features/admin/presentation/orders/orders_page.dart';
+import 'package:veggicart/app/features/admin/presentation/vegetables/vegetables_page.dart';
 import 'package:veggicart/app/features/auth/presentation/login/login_page.dart';
 import 'package:veggicart/app/features/auth/presentation/login/login_provider.dart';
 import 'package:veggicart/app/features/auth/presentation/splash/splash_page.dart';
@@ -35,7 +39,7 @@ class LoginRoute extends GoRouteData with $LoginRoute {
   }
 }
 
-@TypedGoRoute<ProfileRoute>(path: '/:id')
+@TypedGoRoute<ProfileRoute>(path: '/profiles/:id')
 class ProfileRoute extends GoRouteData with $ProfileRoute {
   const ProfileRoute(this.id);
 
@@ -44,5 +48,64 @@ class ProfileRoute extends GoRouteData with $ProfileRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ProfilePage();
+  }
+}
+
+@TypedStatefulShellRoute<AdminShellRoute>(
+  branches: [
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<DashboardRoute>(path: '/dashboard'),
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<VegetablesRoute>(path: '/vegetables'),
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<OrdersRoute>(path: '/orders'),
+      ],
+    ),
+  ],
+)
+class AdminShellRoute extends StatefulShellRouteData {
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    StatefulNavigationShell navigationShell,
+  ) {
+    return AdminBottomNav(
+      navigationShell: navigationShell,
+    );
+  }
+}
+
+class DashboardRoute extends GoRouteData with $DashboardRoute {
+  const DashboardRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const DashboardPage();
+  }
+}
+
+class VegetablesRoute extends GoRouteData with $VegetablesRoute {
+  const VegetablesRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const VegetablesPage();
+  }
+}
+
+class OrdersRoute extends GoRouteData with $OrdersRoute {
+  const OrdersRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const OrdersPage();
   }
 }

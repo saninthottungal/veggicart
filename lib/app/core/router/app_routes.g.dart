@@ -6,7 +6,12 @@ part of 'app_routes.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$splashRoute, $loginRoute, $profileRoute];
+List<RouteBase> get $appRoutes => [
+  $splashRoute,
+  $loginRoute,
+  $profileRoute,
+  $adminShellRoute,
+];
 
 RouteBase get $splashRoute =>
     GoRouteData.$route(path: '/splash', factory: $SplashRoute._fromState);
@@ -54,8 +59,10 @@ mixin $LoginRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $profileRoute =>
-    GoRouteData.$route(path: '/:id', factory: $ProfileRoute._fromState);
+RouteBase get $profileRoute => GoRouteData.$route(
+  path: '/profiles/:id',
+  factory: $ProfileRoute._fromState,
+);
 
 mixin $ProfileRoute on GoRouteData {
   static ProfileRoute _fromState(GoRouterState state) =>
@@ -65,7 +72,100 @@ mixin $ProfileRoute on GoRouteData {
 
   @override
   String get location =>
-      GoRouteData.$location('/${Uri.encodeComponent(_self.id)}');
+      GoRouteData.$location('/profiles/${Uri.encodeComponent(_self.id)}');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $adminShellRoute => StatefulShellRouteData.$route(
+  factory: $AdminShellRouteExtension._fromState,
+  branches: [
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
+          path: '/dashboard',
+          factory: $DashboardRoute._fromState,
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
+          path: '/vegetables',
+          factory: $VegetablesRoute._fromState,
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(path: '/orders', factory: $OrdersRoute._fromState),
+      ],
+    ),
+  ],
+);
+
+extension $AdminShellRouteExtension on AdminShellRoute {
+  static AdminShellRoute _fromState(GoRouterState state) => AdminShellRoute();
+}
+
+mixin $DashboardRoute on GoRouteData {
+  static DashboardRoute _fromState(GoRouterState state) =>
+      const DashboardRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $VegetablesRoute on GoRouteData {
+  static VegetablesRoute _fromState(GoRouterState state) =>
+      const VegetablesRoute();
+
+  @override
+  String get location => GoRouteData.$location('/vegetables');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $OrdersRoute on GoRouteData {
+  static OrdersRoute _fromState(GoRouterState state) => const OrdersRoute();
+
+  @override
+  String get location => GoRouteData.$location('/orders');
 
   @override
   void go(BuildContext context) => context.go(location);

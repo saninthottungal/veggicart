@@ -19,12 +19,14 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     final pod = context.read<SplashProvider>();
-    pod.getProfile().then((res) {
+    pod.getProfile().then((res) async {
+      await Future<void>.delayed(const Duration(seconds: 1));
+
       final ctx = context;
       if (!ctx.mounted) return;
 
-      if (res case Success(:final value)) {
-        ProfileRoute(value.uid).go(ctx);
+      if (res case Success()) {
+        const DashboardRoute().go(ctx);
       } else {
         const LoginRoute().go(ctx);
       }
