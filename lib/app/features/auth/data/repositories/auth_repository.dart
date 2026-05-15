@@ -30,4 +30,10 @@ class AuthRepository {
       return const Failure('Failed to signIn');
     }
   }
+
+  Stream<User?> get authStateChanges => _remote.authStateChanges;
+
+  Future<void> getProfile(String id) async {
+    return _remote.getProfile(id);
+  }
 }
