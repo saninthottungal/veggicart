@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:veggicart/app/core/router/app_router.dart';
+import 'package:veggicart/app/features/auth/data/repositories/auth_repository.dart';
+import 'package:veggicart/app/features/auth/data/sources/auth_remote_data_source.dart';
 import 'package:veggicart/firebase_options.dart';
 
 final talker = TalkerFlutter.init();
@@ -24,12 +28,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: appRouter,
-      title: 'Veggicart',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => AuthRepository(
+            remote: AuthRemoteDataSource(
+              auth: FirebaseAuth.instance,
+            ),
+          ),
+        ),
+      ],
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        title: 'Veggicart',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
       ),
     );
   }

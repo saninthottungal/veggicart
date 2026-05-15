@@ -3,9 +3,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:veggicart/app/common/extensions/context_ext.dart';
 import 'package:veggicart/app/common/extensions/string_ext.dart';
 import 'package:veggicart/app/common/translation/app_translation.dart';
+import 'package:veggicart/app/common/widgets/modal_wrapper.dart';
+import 'package:veggicart/app/common/widgets/toast.dart';
+import 'package:veggicart/app/core/data/result.dart';
+import 'package:veggicart/app/features/auth/presentation/login/login_provider.dart';
 import 'package:veggicart/gen/assets.gen.dart';
 
 final _loginFormKey = GlobalKey<FormBuilderState>();
@@ -13,83 +18,115 @@ final _loginFormKey = GlobalKey<FormBuilderState>();
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
+  Future<void> _signIn(
+    BuildContext context,
+  ) async {
+    final pod = context.read<LoginProvider>();
+    final state = _loginFormKey.currentState;
+    if (state == null || !state.saveAndValidate()) return;
+
+    final email = state.value[_email] as String;
+    final password = state.value[_password] as String;
+
+    final res = await pod.signIn(email: email, password: password);
+    if (!context.mounted) return;
+
+    switch (res) {
+      case Success():
+        break;
+
+      case Failure(:final error, :final description):
+        Toast.error(
+          context,
+          text: error,
+          description: description,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: .all(context.gutter),
-          child: Column(
-            mainAxisAlignment: .spaceAround,
-            children: [
-              Hero(
-                tag: 'logo-splash-login',
-                child: Assets.logos.splashLogo.image(
-                  width: 200,
-                  height: 60,
+    final isProcessing = context.watch<LoginProvider>().value.isProcessing;
+
+    return ModalBarrierWrapper(
+      show: isProcessing,
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: .all(context.gutter),
+            child: Column(
+              mainAxisAlignment: .spaceAround,
+              children: [
+                Hero(
+                  tag: 'logo-splash-login',
+                  child: Assets.logos.splashLogo.image(
+                    width: 200,
+                    height: 60,
+                  ),
                 ),
-              ),
 
-              Assets.images.vegetablesBucket.image(
-                width: context.mdSize.width * .6,
-                height: 250,
-              ),
+                Assets.images.vegetablesBucket.image(
+                  width: context.mdSize.width * .6,
+                  height: 250,
+                ),
 
-              FormBuilder(
-                key: _loginFormKey,
-                child: Column(
-                  spacing: context.gutterSmall,
-                  children: [
-                    Align(
-                      alignment: .centerLeft,
-                      child: Text.rich(
-                        TextSpan(
-                          text: '${t.enterYour.capitalize} ${t.registered}',
-                          children: [
-                            TextSpan(
-                              text: '\n${t.credentials}',
-                              style: context.textTheme.bodyLarge?.copyWith(
-                                color: context.colorScheme.primary,
-                                fontWeight: .w700,
-                                fontSize: 18,
+                FormBuilder(
+                  autovalidateMode: .onUserInteractionIfError,
+                  key: _loginFormKey,
+                  child: Column(
+                    spacing: context.gutterSmall,
+                    children: [
+                      Align(
+                        alignment: .centerLeft,
+                        child: Text.rich(
+                          TextSpan(
+                            text: '${t.enterYour.capitalize} ${t.registered}',
+                            children: [
+                              TextSpan(
+                                text: '\n${t.credentials}',
+                                style: context.textTheme.bodyLarge?.copyWith(
+                                  color: context.colorScheme.primary,
+                                  fontWeight: .w700,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            TextSpan(text: ' ${t.to} ${t.continueKey}'),
-                          ],
+                              TextSpan(text: ' ${t.to} ${t.continueKey}'),
+                            ],
+                          ),
+
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            fontWeight: .w700,
+                            fontSize: 18,
+                          ),
+                          textAlign: .left,
                         ),
+                      ),
 
-                        style: context.textTheme.bodyLarge?.copyWith(
-                          fontWeight: .w700,
-                          fontSize: 18,
+                      FormBuilderTextField(
+                        name: _email,
+                        decoration: const InputDecoration(
+                          hintText: 'Your E-mail',
+                          prefixIcon: Icon(LucideIcons.mail),
                         ),
-                        textAlign: .left,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.email(),
+                        ]),
                       ),
-                    ),
 
-                    FormBuilderTextField(
-                      name: _email,
-                      decoration: const InputDecoration(
-                        hintText: 'Your E-mail',
-                        prefixIcon: Icon(LucideIcons.mail),
+                      const PasswordField(
+                        name: _password,
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                    ),
 
-                    const PasswordField(
-                      name: _password,
-                    ),
-
-                    FilledButton(
-                      onPressed: () {},
-                      child: Text(t.login),
-                    ),
-                  ],
+                      FilledButton(
+                        onPressed: () => _signIn(context),
+                        child: Text(t.login),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
