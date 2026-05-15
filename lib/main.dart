@@ -1,14 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:veggicart/app/core/router/app_router.dart';
+import 'package:veggicart/firebase_options.dart';
 
 final talker = TalkerFlutter.init();
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterError.onError = (details) {
     talker.error(details.exceptionAsString(), details.stack);
   };
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 }
