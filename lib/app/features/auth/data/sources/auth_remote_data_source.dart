@@ -11,10 +11,12 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    return _auth.signInWithEmailAndPassword(
+    final res = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+
+    return res;
   }
 
   Future<void> signOut() => _auth.signOut();

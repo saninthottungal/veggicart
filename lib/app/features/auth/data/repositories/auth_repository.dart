@@ -24,6 +24,8 @@ class AuthRepository {
       } else {
         return const Failure('Failed to signIn');
       }
+    } on FirebaseAuthException catch (e) {
+      return Failure(e.code, description: e.message);
     } catch (_) {
       return const Failure('Failed to signIn');
     }

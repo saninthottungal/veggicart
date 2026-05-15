@@ -33,7 +33,10 @@ class LoginPage extends StatelessWidget {
 
     switch (res) {
       case Success():
-        break;
+        Toast.success(
+          context,
+          text: "Signed In succesfully",
+        );
 
       case Failure(:final error, :final description):
         Toast.error(
