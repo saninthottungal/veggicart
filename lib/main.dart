@@ -44,9 +44,18 @@ class MyApp extends StatelessWidget {
         routerConfig: appRouter,
         title: 'Veggicart',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF5373FE),
+          ),
           useMaterial3: true,
         ),
+        builder: (context, child) {
+          return GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            behavior: .translucent,
+            child: child,
+          );
+        },
       ),
     );
   }

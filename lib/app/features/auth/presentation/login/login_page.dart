@@ -76,56 +76,85 @@ class LoginPage extends StatelessWidget {
                 FormBuilder(
                   autovalidateMode: .onUserInteractionIfError,
                   key: _loginFormKey,
-                  child: Column(
-                    spacing: context.gutterSmall,
-                    children: [
-                      Align(
-                        alignment: .centerLeft,
-                        child: Text.rich(
-                          TextSpan(
-                            text: '${t.enterYour.capitalize} ${t.registered}',
-                            children: [
-                              TextSpan(
-                                text: '\n${t.credentials}',
-                                style: context.textTheme.bodyLarge?.copyWith(
-                                  color: context.colorScheme.primary,
-                                  fontWeight: .w700,
-                                  fontSize: 18,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.gutter,
+                    ),
+                    child: Column(
+                      spacing: context.gutter,
+                      children: [
+                        Align(
+                          alignment: .centerLeft,
+                          child: Text.rich(
+                            TextSpan(
+                              text: '${t.enterYour.capitalize} ${t.registered}',
+                              children: [
+                                TextSpan(
+                                  text: '\n${t.credentials}',
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    color: context.colorScheme.primary,
+                                    fontWeight: .w700,
+                                    fontSize: 18,
+                                  ),
                                 ),
+                                TextSpan(text: ' ${t.to} ${t.continueKey}'),
+                              ],
+                            ),
+
+                            style: context.textTheme.bodyLarge?.copyWith(
+                              fontWeight: .w700,
+                              fontSize: 18,
+                            ),
+                            textAlign: .left,
+                          ),
+                        ),
+
+                        FormBuilderTextField(
+                          name: _email,
+                          decoration: InputDecoration(
+                            hintText: 'Your E-mail',
+                            prefixIcon: const Icon(LucideIcons.mail),
+                            border: .none,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: .circular(context.gutter),
+                            ),
+                          ),
+
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.email(),
+                          ]),
+                        ),
+
+                        const PasswordField(
+                          name: _password,
+                        ),
+
+                        GestureDetector(
+                          onTap: () => _signIn(context),
+                          behavior: .translucent,
+                          child: Container(
+                            padding: .symmetric(
+                              vertical: context.gutterSmall,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: context.colorScheme.primary,
+                              borderRadius: .circular(15),
+                            ),
+                            height: 50,
+                            alignment: .center,
+                            child: Text(
+                              "Login",
+                              style: context.textTheme.bodyLarge?.copyWith(
+                                color: context.colorScheme.onPrimary,
+                                fontWeight: .w600,
                               ),
-                              TextSpan(text: ' ${t.to} ${t.continueKey}'),
-                            ],
+                            ),
                           ),
-
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            fontWeight: .w700,
-                            fontSize: 18,
-                          ),
-                          textAlign: .left,
                         ),
-                      ),
-
-                      FormBuilderTextField(
-                        name: _email,
-                        decoration: const InputDecoration(
-                          hintText: 'Your E-mail',
-                          prefixIcon: Icon(LucideIcons.mail),
-                        ),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.email(),
-                        ]),
-                      ),
-
-                      const PasswordField(
-                        name: _password,
-                      ),
-
-                      FilledButton(
-                        onPressed: () => _signIn(context),
-                        child: Text(t.login),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -172,6 +201,10 @@ class _PasswordFieldState extends State<PasswordField> {
           child: Icon(
             shouldObscure ? LucideIcons.eyeOff : LucideIcons.eye,
           ),
+        ),
+        border: .none,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: .circular(context.gutter),
         ),
       ),
       obscureText: shouldObscure,
